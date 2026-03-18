@@ -27,7 +27,7 @@ FAISS_METRIC = "cosine"  # Options: cosine, L2
 
 # Search configurations
 TOP_K_RESULTS = 10
-SIMILARITY_THRESHOLD = 0.5
+SIMILARITY_THRESHOLD = 0.3
 
 # Preprocessing configurations
 REMOVE_STOPWORDS = True

@@ -146,7 +146,7 @@ def main():
         # Settings
         st.subheader("Search Settings")
         top_k = st.slider("Number of Results", min_value=1, max_value=20, value=10)
-        threshold = st.slider("Similarity Threshold", min_value=0.0, max_value=1.0, value=0.5, step=0.05)
+        threshold = st.slider("Similarity Threshold", min_value=0.0, max_value=1.0, value=0.3, step=0.05)
         
         st.divider()
         
@@ -168,7 +168,8 @@ def main():
         query = st.text_input(
             "Search Query",
             placeholder="Enter your search query (e.g., 'deep learning for medical imaging')",
-            label_visibility="collapsed"
+            label_visibility="collapsed",
+            key="query_input"
         )
     
     with col2:
@@ -178,18 +179,22 @@ def main():
     
     # Session state for results
     if 'results' not in st.session_state:
-        st.session_state.results = []
+        st.session_state.results = None  # None means no search yet
     if 'processing_time' not in st.session_state:
         st.session_state.processing_time = 0
+    if 'last_query' not in st.session_state:
+        st.session_state.last_query = ""
     
     # Handle search
-    if search_button and query:
-        with st.spinner(f"Searching for '{query}'..."):
+    if (search_button and query) or (st.session_state.get('query_input') and st.session_state.get('query_input') != st.session_state.last_query):
+        search_query = query if query else st.session_state.get('query_input')
+        
+        with st.spinner(f"Searching for '{search_query}'..."):
             start_time = time.time()
             
             try:
                 results = search_engine.search(
-                    query=query,
+                    query=search_query,
                     top_k=top_k,
                     threshold=threshold
                 )
@@ -198,49 +203,53 @@ def main():
                 
                 st.session_state.results = results
                 st.session_state.processing_time = processing_time
+                st.session_state.last_query = search_query
                 
             except Exception as e:
                 st.error(f"Search failed: {e}")
                 st.session_state.results = []
     
     # Display results
-    if st.session_state.results:
-        st.divider()
-        
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            st.metric(
-                label="Results Found",
-                value=len(st.session_state.results),
-                delta=None
-            )
-        
-        with col2:
-            st.metric(
-                label="Processing Time",
-                value=f"{st.session_state.processing_time*1000:.1f}ms",
-                delta=None
-            )
-        
-        with col3:
-            avg_score = np.mean([r['similarity_score'] for r in st.session_state.results])
-            st.metric(
-                label="Avg Similarity",
-                value=f"{avg_score*100:.1f}%",
-                delta=None
-            )
-        
-        st.divider()
-        
-        st.subheader("Search Results")
-        
-        # Display each result
-        for i, result in enumerate(st.session_state.results, 1):
-            render_result_card(result, i)
+    if st.session_state.results is not None:
+        if len(st.session_state.results) > 0:
+            st.divider()
+            
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                st.metric(
+                    label="Results Found",
+                    value=len(st.session_state.results),
+                    delta=None
+                )
+            
+            with col2:
+                st.metric(
+                    label="Processing Time",
+                    value=f"{st.session_state.processing_time*1000:.1f}ms",
+                    delta=None
+                )
+            
+            with col3:
+                avg_score = np.mean([r['similarity_score'] for r in st.session_state.results])
+                st.metric(
+                    label="Avg Similarity",
+                    value=f"{avg_score*100:.1f}%",
+                    delta=None
+                )
+            
+            st.divider()
+            
+            st.subheader(f"Search Results for '{st.session_state.last_query}'")
+            
+            # Display each result
+            for i, result in enumerate(st.session_state.results, 1):
+                render_result_card(result, i)
+        else:
+            st.warning(f"No results found for '{st.session_state.last_query}' with similarity above {threshold*100:.0f}%. Try lowering the threshold or changing your query.")
     
     # Example queries
-    if not st.session_state.results:
+    if st.session_state.results is None or len(st.session_state.results) == 0:
         st.divider()
         
         st.subheader("Example Queries")
@@ -257,8 +266,8 @@ def main():
         for i, example in enumerate(example_queries):
             with cols[i]:
                 if st.button(example, key=f"example_{i}", use_container_width=True):
-                    st.session_state.query = example
-                    st.rerun()
+                    st.session_state.query_input = example
+                    st.experimental_rerun()
     
     # Footer
     st.divider()

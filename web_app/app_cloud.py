@@ -294,7 +294,7 @@ def main():
                     st.session_state.query = example
                     results = search(example, engine_data, top_k=top_k, threshold=threshold)
                     st.session_state.results = results
-                    st.rerun()
+                    st.experimental_rerun()
     
     # Footer
     st.divider()
