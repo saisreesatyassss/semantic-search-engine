@@ -193,25 +193,25 @@ git commit -m "Initial commit - Clean for Streamlit"
 ### Requirements.txt (Optimized)
 ```txt
 # No python version (Streamlit manages this)
-pandas==2.0.3
-numpy==1.24.3
-scikit-learn==1.3.0
-nltk==3.8.1
-spacy==3.6.1
-torch==2.0.1
-transformers==4.31.0
-sentence-transformers==2.2.2
-faiss-cpu==1.7.4
-fastapi==0.100.1
-uvicorn[standard]==0.23.2
-streamlit==1.25.0
-matplotlib==3.7.2
-seaborn==0.12.2
-tqdm==4.65.0
-joblib==1.3.1
-requests==2.31.0
-pyyaml==6.0.1
-rank-bm25==0.2.2
+numpy>=1.26.0
+pandas>=2.2.2
+scikit-learn>=1.4.0
+nltk>=3.8.1
+spacy>=3.7.0
+torch>=2.2.0
+transformers>=4.40.0
+sentence-transformers>=2.7.0
+faiss-cpu>=1.8.0
+fastapi>=0.110.0
+uvicorn[standard]>=0.23.2
+streamlit>=1.35.0
+matplotlib>=3.8.0
+seaborn>=0.13.0
+tqdm>=4.66.0
+joblib>=1.4.0
+requests>=2.32.0
+pyyaml>=6.0.1
+rank-bm25>=0.2.2
 ```
 
 ### Performance
