@@ -1,0 +1,84 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Data
+data/raw/*
+!data/raw/.gitkeep
+# Include these for deployment (commented out to allow versioning)
+# data/processed/*.csv
+# data/processed/*.pkl
+# data/processed/*.npy
+
+# Models and Index
+models/saved_models/*
+!models/saved_models/.gitkeep
+# Include FAISS index for deployment (commented out)
+# vector_database/faiss.index
+# vector_database/index_metadata.pkl
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Cache
+.cache/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Git (prevent .git folder from being included)
+.git/
+
+# Qoder IDE
+.qoder/
